@@ -19,7 +19,8 @@
                     <th scope="col">L</th>
                     <th scope="col">OT</th>
                     <th scope="col">Points</th>
-                    <th scope="col">Current Pace</th>
+                    <th scope="col">Points Pace</th>
+                    <th scope="col">Games Left</th>
                 </tr>
               </thead>
                 <tbody>
@@ -30,6 +31,7 @@
                     <td>{{team["leagueRecord"]["ot"]}}</td>
                     <td>{{team["points"]}}</td>
                     <td>{{parseInt(parseFloat(team["pointsPercentage"]) * 56 *2) }}</td>
+                    <td>{{56 - parseInt(team["gamesPlayed"]) }}</td>
                 </tr>
                 </tbody>
             </table> 
