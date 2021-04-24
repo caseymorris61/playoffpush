@@ -15,31 +15,37 @@
           </select>
       </div>
       <br>
-      <div colspan="4">
+      <div>
           <div v-if="selectedDivision != null">
           <h4>{{ selectedDivision }} Standings</h4>
           <table class="table">
               <thead>
                 <tr>
                     <th scope="col">Team</th>
+                    <th scope="col">GP</th>
                     <th scope="col">W</th>
                     <th scope="col">L</th>
                     <th scope="col">OT</th>
-                    <th scope="col">Points</th>
-                    <th scope="col">Points Pace</th>
-                    <th scope="col">Games Left</th>
-                    <th scope="col" v-if="chaserTeamName != 'null'">Record To Match Pace</th>
+                    <th scope="col">Pts</th>
+                    <th scope="col">GF</th>
+                    <th scope="col">GA</th>
+                    <th scope="col">Diff</th>
+                    <th scope="col">Pts Pace</th>
+                    <th scope="col" v-if="chaserTeamName != 'null'">To Match</th>
                 </tr>
               </thead>
                 <tbody>
                 <tr v-for="team in selectedTeams" v-bind:key="team['.key']"> 
                     <td scope="row">{{team["team"]["name"]}}</td>
+                    <td>{{team["gamesPlayed"] }}</td>
                     <td>{{team["leagueRecord"]["wins"]}}</td>
                     <td>{{team["leagueRecord"]["losses"]}}</td>
                     <td>{{team["leagueRecord"]["ot"]}}</td>
                     <td>{{team["points"]}}</td>
-                    <td>{{parseInt(estimatedPointsPace(parseFloat(team["pointsPercentage"]))) }}</td>
-                    <td>{{numGamesSeason - parseInt(team["gamesPlayed"]) }}</td>
+                    <td>{{team["goalsScored"]}}</td>
+                    <td>{{team["goalsAgainst"]}}</td>
+                    <td>{{parseInt(team["goalsScored"]) - parseInt(team["goalsAgainst"])}}</td>
+                    <td>{{Math.round(estimatedPointsPace(parseFloat(team["pointsPercentage"]))) }}</td>
                     <td v-if="chaserTeamName != 'null'">{{ recordNeeded(team["team"]["name"], team["pointsPercentage"]) }}</td>
                 </tr>
                 </tbody>
@@ -96,7 +102,7 @@
     },
     methods : {
         estimatedPointsPace(pointsPercentage){
-            return this.numGamesSeason * 2 * pointsPercentage
+            return parseFloat(this.numGamesSeason) * 2.0 * pointsPercentage
         },
         recordNeeded(teamName, pointsPercentage){
             const teamNameCheck = this.chaserTeamName
@@ -115,7 +121,7 @@
                 }
             })
 
-            let pointsNeeded = parseInt(this.estimatedPointsPace(pointsPercentage) - chaserPoints)
+            let pointsNeeded = parseInt(Math.round(this.estimatedPointsPace(pointsPercentage)) - chaserPoints)
             if (pointsNeeded <= 0) {
                 return "---"
             }
